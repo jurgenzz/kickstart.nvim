@@ -193,6 +193,14 @@ vim.keymap.set('n', '<M-e>', function()
   vim.cmd 'buf#'
 end, { desc = 'Go to previous buffer', silent = true })
 
+-- split vertically/horizontally same as tmux
+vim.keymap.set('n', '<C-w>|', function()
+  vim.cmd 'vsplit'
+end, { desc = 'Split window horizontally', silent = true })
+
+-- open definition in split
+vim.keymap.set('n', 'gv', ':vsplit<CR>gd', { desc = 'Open definition in split', silent = true })
+
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
@@ -362,7 +370,12 @@ require('lazy').setup({
         --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
         --   },
         -- },
-        -- pickers = {}
+        pickers = {
+          colorscheme = {
+            enable_preview = true,
+          },
+        },
+
         extensions = {
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
@@ -383,7 +396,11 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
       vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
       vim.keymap.set('n', '<C-S-i>', builtin.live_grep, { desc = '[S]earch by [G]rep' })
-      vim.keymap.set('n', '<M-i>', builtin.live_grep, { desc = '[S]earch by [G]rep' })
+      vim.keymap.set('n', '<M-i>', function()
+        builtin.live_grep {
+          additional_args = { '--fixed-strings' },
+        }
+      end, { desc = '[S]earch by [G]rep' })
       vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
@@ -668,6 +685,8 @@ require('lazy').setup({
         -- is found.
         javascript = { { 'prettierd', 'prettier' } },
         typescript = { { 'prettierd', 'prettier' } },
+        typescriptreact = { { 'prettierd', 'prettier' } },
+        tstsx = { { 'prettierd', 'prettier' } },
         json = { { 'prettierd', 'prettier' } },
       },
     },
@@ -809,6 +828,36 @@ require('lazy').setup({
     'nvim-telescope/telescope-file-browser.nvim',
     dependencies = { 'nvim-telescope/telescope.nvim', 'nvim-lua/plenary.nvim' },
   },
+  { 'kevinhwang91/promise-async' },
+
+  {
+    'kevinhwang91/nvim-ufo',
+    requires = 'kevinhwang91/promise-async',
+    init = function()
+      vim.o.foldcolumn = '1' -- '0' is not bad
+      vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
+      vim.o.foldlevelstart = 99
+      vim.o.foldenable = true
+
+      vim.keymap.set('n', 'zR', require('ufo').openAllFolds)
+      vim.keymap.set('n', 'zM', require('ufo').closeAllFolds)
+
+      vim.o.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]]
+      local capabilities = vim.lsp.protocol.make_client_capabilities()
+      capabilities.textDocument.foldingRange = {
+        dynamicRegistration = false,
+        lineFoldingOnly = true,
+      }
+      local language_servers = require('lspconfig').util.available_servers() -- or list servers manually like {'gopls', 'clangd'}
+      for _, ls in ipairs(language_servers) do
+        require('lspconfig')[ls].setup {
+          capabilities = capabilities,
+          -- you can add other fields for setting up lsp server in this table
+        }
+      end
+      require('ufo').setup()
+    end,
+  },
 
   --{
   --'karb94/neoscroll.nvim',
@@ -818,6 +867,11 @@ require('lazy').setup({
   --},
 
   -- themes
+  { 'fcancelinha/northern.nvim' },
+  { 'projekt0n/github-nvim-theme' },
+  { 'https://github.com/LunarVim/lunar.nvim' },
+  { 'lunarvim/colorschemes' },
+  { 'catppuccin/nvim', as = 'catppuccin' },
   { 'rebelot/kanagawa.nvim' },
   {
     'psliwka/vim-smoothie',
