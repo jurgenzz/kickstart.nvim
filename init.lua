@@ -201,6 +201,9 @@ end, { desc = 'Split window horizontally', silent = true })
 -- open definition in split
 vim.keymap.set('n', 'gv', ':vsplit<CR>gd', { desc = 'Open definition in split', silent = true })
 
+-- comment out a line
+vim.keymap.set('n', '<C-/>', 'gcc')
+
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
@@ -249,7 +252,14 @@ require('lazy').setup({
   --    require('Comment').setup({})
 
   -- "gc" to comment visual regions/lines
-  { 'numToStr/Comment.nvim', opts = {} },
+  { 'numToStr/Comment.nvim', opts = {}, setup = {
+    toggler = {
+      line = 'g/',
+    },
+    mappings = {
+      basic = true,
+    },
+  } },
   --{ 'f-person/git-blame.nvim' },
 
   -- Here is a more advanced example where we pass configuration
@@ -407,8 +417,8 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
 
       -- open file_browser with the path of the current buffer
-      vim.keymap.set('n', '<C-S-e>', ':Telescope file_browser path=%:p:h select_buffer=true<CR>')
-      vim.keymap.set('n', '<M-S-e>', ':Telescope file_browser path=%:p:h select_buffer=true<CR>')
+      vim.keymap.set('n', '<M-l>', ':Telescope file_browser path=%:p:h select_buffer=true<CR>')
+      -- vim.keymap.set('n', '<M-S-e>', ':Telescope file_browser path=%:p:h select_buffer=true<CR>')
       -- Slightly advanced example of overriding default behavior and theme
       vim.keymap.set('n', '<leader>/', function()
         -- You can pass additional configuration to Telescope to change the theme, layout, etc.
@@ -688,6 +698,7 @@ require('lazy').setup({
         typescriptreact = { { 'prettierd', 'prettier' } },
         tstsx = { { 'prettierd', 'prettier' } },
         json = { { 'prettierd', 'prettier' } },
+        css = { { 'prettierd', 'prettier' } },
       },
     },
   },
@@ -876,6 +887,10 @@ require('lazy').setup({
   {
     'psliwka/vim-smoothie',
   },
+  { 'kaicataldo/material.vim' },
+  { 'yunlingz/equinusocio-material.vim' },
+
+  -- centered layout
   {
     'shortcuts/no-neck-pain.nvim',
     version = '*',
@@ -964,6 +979,7 @@ require('lazy').setup({
     build = ':TSUpdate',
     opts = {
       indent = { enable = true, disable = { 'ruby' } },
+      highlight = { enable = true },
     },
     config = function(_, opts)
       -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
