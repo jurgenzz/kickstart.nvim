@@ -260,7 +260,7 @@ require('lazy').setup({
       basic = true,
     },
   } },
-  --{ 'f-person/git-blame.nvim' },
+  { 'f-person/git-blame.nvim' },
 
   -- Here is a more advanced example where we pass configuration
   -- options to `gitsigns.nvim`. This is equivalent to the following Lua:
@@ -406,6 +406,7 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
       vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
       vim.keymap.set('n', '<C-S-i>', builtin.live_grep, { desc = '[S]earch by [G]rep' })
+      vim.keymap.set('v', '<M-i>', '"zy<Cmd>Telescope live_grep<CR><C-r>z')
       vim.keymap.set('n', '<M-i>', function()
         builtin.live_grep {
           additional_args = { '--fixed-strings' },
@@ -414,7 +415,11 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
-      vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
+      vim.keymap.set('n', '<leader><leader>', function()
+        builtin.buffers {
+          sort_mru = true,
+        }
+      end, { desc = '[ ] Find existing buffers' })
 
       -- open file_browser with the path of the current buffer
       vim.keymap.set('n', '<M-l>', ':Telescope file_browser path=%:p:h select_buffer=true<CR>')
@@ -695,6 +700,7 @@ require('lazy').setup({
         -- is found.
         javascript = { { 'prettierd', 'prettier' } },
         typescript = { { 'prettierd', 'prettier' } },
+        html = { { 'prettierd', 'prettier' } },
         typescriptreact = { { 'prettierd', 'prettier' } },
         tstsx = { { 'prettierd', 'prettier' } },
         json = { { 'prettierd', 'prettier' } },
@@ -870,12 +876,12 @@ require('lazy').setup({
     end,
   },
 
-  --{
-  --'karb94/neoscroll.nvim',
-  --config = function()
-  --require('neoscroll').setup {}
-  --end,
-  --},
+  -- {
+  --   'karb94/neoscroll.nvim',
+  --   config = function()
+  --     require('neoscroll').setup {}
+  --   end,
+  -- },
 
   -- themes
   { 'fcancelinha/northern.nvim' },
@@ -884,11 +890,25 @@ require('lazy').setup({
   { 'lunarvim/colorschemes' },
   { 'catppuccin/nvim', as = 'catppuccin' },
   { 'rebelot/kanagawa.nvim' },
+  { 'kaicataldo/material.vim' },
+  { 'yunlingz/equinusocio-material.vim' },
+  { 'EdenEast/nightfox.nvim' },
+
+  { 'tpope/vim-fugitive' },
   {
     'psliwka/vim-smoothie',
   },
-  { 'kaicataldo/material.vim' },
-  { 'yunlingz/equinusocio-material.vim' },
+  -- {
+  --   'scottmckendry/cyberdream.nvim',
+  --   lazy = false,
+  --   priority = 1000,
+  --   init = function()
+  --     vim.cmd.colorscheme 'cyberdream'
+  --   end,
+  --   opts = {
+  --     transparent = true,
+  --   },
+  -- },
 
   -- centered layout
   {
@@ -933,8 +953,9 @@ require('lazy').setup({
           width = 0.9,
         },
       }
-      vim.keymap.set('n', '<C-`>', '<CMD>lua require("FTerm").toggle()<CR>')
-      vim.keymap.set('t', '<C-`>', '<C-\\><C-n><CMD>lua require("FTerm").toggle()<CR>')
+      vim.keymap.set('n', '<M-`>', '<CMD>lua require("FTerm").toggle()<CR>')
+      vim.keymap.set('v', '<M-`>', '<CMD>lua require("FTerm").toggle()<CR>')
+      vim.keymap.set('t', '<M-`>', '<C-\\><C-n><CMD>lua require("FTerm").toggle()<CR>')
     end,
   },
   { -- Collection of various small independent plugins/modules
@@ -979,7 +1000,7 @@ require('lazy').setup({
     build = ':TSUpdate',
     opts = {
       indent = { enable = true, disable = { 'ruby' } },
-      highlight = { enable = true },
+      highlight = { enable = true, additional_vim_regex_highlighting = false },
     },
     config = function(_, opts)
       -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
@@ -1011,7 +1032,7 @@ require('lazy').setup({
   -- require 'kickstart.plugins.indent_line',
   require 'kickstart.plugins.lint',
   -- require 'kickstart.plugins.autopairs',
-  -- require 'kickstart.plugins.neo-tree',
+  require 'kickstart.plugins.neo-tree',
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
