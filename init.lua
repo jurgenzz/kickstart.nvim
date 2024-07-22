@@ -81,8 +81,15 @@ If you experience any errors while trying to install kickstart, run `:checkhealt
 I hope you enjoy your Neovim journey,
 - TJ
 
+
+
 P.S. You can delete this when you're done too. It's your config now! :)
 --]]
+-- let &t_8f = "\<Esc>[38:2:%lu:%lu:%lum"
+-- let &t_8b = "\<Esc>[48:2:%lu:%lu:%lum"
+-- set termguicolors
+-- set term=xterm-256color
+vim.o.termguicolors = true
 vim.opt.swapfile = false
 -- Set <space> as the leader key
 -- See `:help mapleader`
@@ -893,6 +900,8 @@ require('lazy').setup({
   { 'kaicataldo/material.vim' },
   { 'yunlingz/equinusocio-material.vim' },
   { 'EdenEast/nightfox.nvim' },
+  { 'AlexvZyl/nordic.nvim' },
+  { 'rmehri01/onenord.nvim' },
 
   { 'tpope/vim-fugitive' },
   {
