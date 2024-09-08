@@ -414,6 +414,7 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
       vim.keymap.set('n', '<C-S-i>', builtin.live_grep, { desc = '[S]earch by [G]rep' })
       vim.keymap.set('v', '<M-i>', '"zy<Cmd>Telescope live_grep<CR><C-r>z')
+      vim.keymap.set('n', '<C-g>', '"zy<Cmd>Telescope git_status<CR><C-r>z')
       vim.keymap.set('n', '<M-i>', function()
         builtin.live_grep {
           additional_args = { '--fixed-strings' },
@@ -1027,7 +1028,14 @@ require('lazy').setup({
       --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
     end,
   },
-
+  {
+    'm4xshen/hardtime.nvim',
+    dependencies = { 'MunifTanjim/nui.nvim', 'nvim-lua/plenary.nvim' },
+    opts = {
+      max_count = 1000,
+      disable_mouse = false,
+    },
+  },
   -- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
   -- place them in the correct locations.
