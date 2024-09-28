@@ -907,7 +907,20 @@ require('lazy').setup({
   { 'tpope/vim-fugitive' },
   {
     'psliwka/vim-smoothie',
+  }, -- Lazy
+  {
+    'vague2k/vague.nvim',
+    config = function()
+      require('vague').setup {
+        -- optional configuration here
+        colors = {
+
+          string = '#85B182',
+        },
+      }
+    end,
   },
+  --
   -- {
   --   'scottmckendry/cyberdream.nvim',
   --   lazy = false,
@@ -936,10 +949,10 @@ require('lazy').setup({
         nnp.toggle()
       end, { silent = true })
       --vim.keymap.set('n', '<C-]>', nnp.resize(5)
-      vim.keymap.set('n', '<C-]>', function()
+      vim.keymap.set('n', '<C-\\>', function()
         vim.cmd 'NoNeckPainWidthUp'
       end, { silent = true })
-      vim.keymap.set('n', '<C-[>', function()
+      vim.keymap.set('n', '<C-]>', function()
         vim.cmd 'NoNeckPainWidthDown'
       end, { silent = true })
     end,
