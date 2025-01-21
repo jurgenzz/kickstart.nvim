@@ -7,19 +7,19 @@ return {
       local lint = require 'lint'
       lint.linters_by_ft = {
         markdown = { 'markdownlint' },
-        javascript = { 'eslint_d' },
-        typescript = { 'eslint_d' },
-        typescriptreact = { 'eslint_d' },
+        -- javascript = { 'eslint_lsp_client' },
+        -- typescript = { 'eslint-lsp' },
+        -- typescriptreact = { 'eslint-lsp' },
       }
-      lint.linters.eslint_d = require('lint.util').wrap(lint.linters.eslint_d, function(diagnostic)
-        -- try to ignore "No ESLint configuration found" error
-        -- if diagnostic.message:find("Error: No ESLint configuration found") then -- old version
-        -- update: 20240814, following is working
-        if diagnostic.message:find "Error: Failed to load plugin 'import'" then
-          return nil
-        end
-        return diagnostic
-      end)
+      -- lint.linters.eslint_d = require('lint.util').wrap(lint.linters.eslint_d, function(diagnostic)
+      --   -- try to ignore "No ESLint configuration found" error
+      --   -- if diagnostic.message:find("Error: No ESLint configuration found") then -- old version
+      --   -- update: 20240814, following is working
+      --   if diagnostic.message:find "Error: Failed to load plugin 'import'" then
+      --     return nil
+      --   end
+      --   return diagnostic
+      -- end)
 
       -- To allow other plugins to add linters to require('lint').linters_by_ft,
       -- instead set linters_by_ft like this:

@@ -414,7 +414,24 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
       vim.keymap.set('n', '<C-S-i>', builtin.live_grep, { desc = '[S]earch by [G]rep' })
       vim.keymap.set('v', '<M-i>', '"zy<Cmd>Telescope live_grep<CR><C-r>z')
-      vim.keymap.set('n', '<C-g>', '"zy<Cmd>Telescope git_status<CR><C-r>z')
+      -- vim.keymap.set('n', '<C-g>', '"zy<Cmd>Telescope git_status<CR><C-r>z')
+      --
+      local previewers = require 'telescope.previewers'
+      local themes = require 'telescope.themes'
+
+      local delta = previewers.new_termopen_previewer {
+        get_command = function(entry)
+          if entry.status == '??' or 'A ' then
+            return { 'git', 'diff', entry.value }
+          end
+
+          return { 'git', 'diff', entry.value .. '^!' }
+        end,
+      }
+
+      vim.keymap.set('n', '<C-g>', function()
+        builtin.git_status { previewer = delta, layout_strategy = 'vertical' }
+      end)
       vim.keymap.set('n', '<M-i>', function()
         builtin.live_grep {
           additional_args = { '--fixed-strings' },
@@ -883,7 +900,36 @@ require('lazy').setup({
       require('ufo').setup()
     end,
   },
-
+  -- nvim v0.8.0
+  {
+    'kdheepak/lazygit.nvim',
+    lazy = true,
+    cmd = {
+      'LazyGit',
+      'LazyGitConfig',
+      'LazyGitCurrentFile',
+      'LazyGitFilter',
+      'LazyGitFilterCurrentFile',
+    },
+    -- optional for floating window border decoration
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+    },
+    -- setting the keybinding for LazyGit with 'keys' is recommended in
+    -- order to load the plugin when the command is run for the first time
+    keys = {
+      { '<leader>g', '<cmd>LazyGit<cr>', desc = 'LazyGit' },
+    },
+  },
+  -- Lua
+  {
+    'folke/twilight.nvim',
+    opts = {
+      -- your configuration comes here
+      -- or leave it empty to use the default settings
+      -- refer to the configuration section below
+    },
+  },
   -- {
   --   'karb94/neoscroll.nvim',
   --   config = function()
